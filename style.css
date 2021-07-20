@@ -1,0 +1,26 @@
+.flexcontainer{
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.Large-video{
+  display: flex;
+  flex-direction: column;
+}
+
+.Large-video video{
+  width: 160%;
+  height: auto;
+}
+
+.Small-video{
+  display: flex;
+  flex-direction: column;
+}
+
+.Small-video video{
+  width: 40%;
+  height: auto;
+}
+ 
