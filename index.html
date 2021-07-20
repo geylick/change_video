@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カメラ映像</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="flexcontainer">
+
+      <div class="Large-video">
+            <video id="video0"></video>
+      </div>
+
+        <div class="Small-video">
+            <video id="video1" onclick="video_change(1)"></video>
+            <video id="video2" onclick="video_change(2)"></video>
+            <video id="video3" onclick="video_change(3)"></video>
+            <video id="video4" onclick="video_change(4)"></video>
+        </div>
+</div>
+
+    <script>
+
+    var arr = [];
+
+      //デバイス一覧取得
+      navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
+
+      //デバイス情報取得
+      function gotDevices(deviceInfos) {
+        // Handles being called several times to update labels. Preserve values.
+        for (let i = 0; i !== deviceInfos.length; ++i) {
+          const deviceInfo = deviceInfos[i];
+          if (deviceInfo.kind === 'videoinput') {
+            arr.push(deviceInfo.deviceId)
+          } else if (deviceInfo.kind === 'audiooutput') { //audiooutputの時は何もしない
+          } else if (deviceInfo.kind === 'audioinput') {  //audioinputの時は何もしない
+          } else {
+            console.log('Some other kind of source/device: ', deviceInfo);
+          }
+        }
+        //開始
+        start();
+      }
+
+      //デバイス取得エラー対応
+      function handleError(error) {
+        console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
+      }
+
+//
+//ビデオ再生
+//
+function start(){
+
+  for(let i=0; i<5; i++){
+    const video_buf = document.getElementById("video"+i)
+    navigator.mediaDevices.getUserMedia({
+        audio: false,
+        //video: { deviceId: { exact: arr[0]} }
+        video: {deviceId: arr[i] ? {exact: arr[i]} : undefined}
+    }).then(stream => {
+        video_buf.srcObject = stream;
+        video_buf.play()
+    }).catch(e => {
+      console.log(e)
+    })
+  }
+}
+
+//
+//ビデオ削除
+//
+function video_remove(num){
+  const element = document.getElementById("video"+num)
+  element.remove()
+}
+
+
+//
+//ビデオ入替
+//
+function video_change(num){
+let j = 0;
+
+  for(let i=0; i<5; i++){
+    if(i == num){
+      const video_buf = document.getElementById("video0")
+    }else{
+    const video_buf = document.getElementById("video"+j)
+    j = j+1;
+    }
+    navigator.mediaDevices.getUserMedia({
+        audio: false,
+        //video: { deviceId: { exact: arr[0]} }
+        video: {deviceId: arr[i] ? {exact: arr[i]} : undefined}
+    }).then(stream => {
+        video_buf.srcObject = stream;
+        video_buf.play()
+    }).catch(e => {
+      console.log(e)
+    })
+  }
+}
+
+
+//
+//ビデオ拡大・縮小
+//
+function resizeVideo(BigSmall) {  //０のとき拡大、１のとき縮小
+  for(let i = 0; i < 5; i++){
+    var target = document.getElementById("video" + i);
+    if (target == null) {
+      continue;
+    }
+
+    if (target.width === 0) {
+      var orgWidth  = target.videoWidth;
+      var orgHeight = target.videoHeight;
+    } else {
+      var orgWidth  = target.width;
+      var orgHeight = target.height;
+    }
+
+    if (BigSmall === 0) {
+      target.width = orgWidth*1.1;  //縦横1.1倍
+      target.height = orgHeight*1.1;
+    } else {
+      target.width = orgWidth*0.9;  //縦横0.9倍
+      target.height = orgHeight*0.9;
+    }
+  }
+}
+
+    </script>
+</body>
+</html>
