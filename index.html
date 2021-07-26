@@ -90,8 +90,8 @@ let j = 0;
     if(i == num){
       const video_buf = document.getElementById("video0")
     }else{
-    const video_buf = document.getElementById("video"+j)
     j = j+1;
+    const video_buf = document.getElementById("video"+j)
     }
     navigator.mediaDevices.getUserMedia({
         audio: false,
