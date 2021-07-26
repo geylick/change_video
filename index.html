@@ -10,11 +10,11 @@
 
 <div class="flexcontainer">
 
-      <div class="Large-video">
-            <video id="video0"></video>
+      <div id = "Large" class="Large-video">
+            <video id="video0" onclick="video_change(0)"></video>
       </div>
 
-        <div class="Small-video">
+        <div id = "Small" class="Small-video">
             <video id="video1" onclick="video_change(1)"></video>
             <video id="video2" onclick="video_change(2)"></video>
             <video id="video3" onclick="video_change(3)"></video>
@@ -24,8 +24,7 @@
 
     <script>
 
-    var arr = [];     
-    
+    var arr = [];
 
       //デバイス一覧取得
       navigator.mediaDevices.enumerateDevices().then(gotDevices).catch(handleError);
@@ -85,26 +84,16 @@ function video_remove(num){
 //ビデオ入替
 //
 function video_change(num){
-let j = 0;
 
-  for(let i=0; i<5; i++){
-    if(i == num){
-      var video_buf = document.getElementById("video0")
-    }else{
-      j = j+1;
-      var video_buf = document.getElementById("video"+j)
-    }
-    navigator.mediaDevices.getUserMedia({
-        audio: false,
-        //video: { deviceId: { exact: arr[0]} }
-        video: {deviceId: arr[i] ? {exact: arr[i]} : undefined}
-    }).then(stream => {
-        video_buf.srcObject = stream;
-        video_buf.play()
-    }).catch(e => {
-      console.log(e)
-    })
-  }
+  var elem_from_Small = document.getElementById("video"+num);
+  var elem_to_Small = document.getElementById("Small");
+  var elem_from_Large = document.getElementById("Large").getElementsByTagName("video").item(0);
+  var elem_to_Large = document.getElementById("Large");
+
+
+  elem_to_Small.appendChild(elem_from_Large);
+  elem_to_Large.appendChild(elem_from_Small);
+
 }
 
 
