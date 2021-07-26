@@ -1,6 +1,6 @@
 .flexcontainer{
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 
@@ -17,6 +17,7 @@
 .Small-video{
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
 }
 
 .Small-video video{
